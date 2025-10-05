@@ -5,7 +5,6 @@ export default function Home() {
         flexDirection: "column",
         justifyContent: "flex-start",
         height: "100%",
-        border: "2px solid red"
     }}>
       <h1>Home</h1>
       <p>Welcome Fellow Finds</p>

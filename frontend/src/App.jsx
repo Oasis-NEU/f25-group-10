@@ -11,9 +11,9 @@ import Navbar from "./components/Navbar";
 function App() {
   return (
     <Router>
-      <div style={{ display: "flex", border: "2px solid red", height: "100%", flex: "1"}}>
+      <div style={{ display: "flex", height: "100vh", flexGrow: "1"}}>
         <Navbar /> {/* sidebar stays fixed on the left */}
-        <main style={{marginLeft: "220px",
+        <main style={{marginLeft: "0px",
         padding: "1rem 2rem", 
         width: "100%",
         display: "flex",
