@@ -1,42 +1,83 @@
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #aee9f7 0%, #f7f7a6 100%);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background-image: url('/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  min-height: 100vh;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.ff-nav {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  background: rgba(255,255,255,0.7);
+  box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.17);
+  border-radius: 0 0 32px 32px;
+  padding: 1rem 0.5rem;
+  margin-bottom: 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.ff-nav-link {
+  font-weight: bold;
+  color: #1a3c5b;
+  text-decoration: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 16px;
+  transition: background 0.2s, color 0.2s;
+}
+.ff-nav-link:hover {
+  background: linear-gradient(90deg, #aee9f7 60%, #f7f7a6 100%);
+  color: #2e5c7c;
+  box-shadow: 0 2px 8px #aee9f7;
 }
 
-.card {
-  padding: 2em;
+.frutiger-panel {
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
 }
 
-.read-the-docs {
-  color: #888;
+.frutiger-button {
+  background: linear-gradient(to bottom, rgba(0, 122, 255, 0.7), rgba(0, 80, 200, 0.7));
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.frutiger-button:hover {
+  background: linear-gradient(to bottom, rgba(0, 122, 255, 0.9), rgba(0, 80, 200, 0.9));
+  box-shadow: 0 0 15px rgba(0, 122, 255, 0.7);
+}
+
+.sidebar-button {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #f0f0f0;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  text-align: left;
+  padding: 10px 15px;
+}
+
+.sidebar-button:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.8);
 }
