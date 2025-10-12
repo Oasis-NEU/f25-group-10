@@ -25,8 +25,6 @@ function App() {
             <Link to="/explore" className="sidebar-button">Explore</Link>
             <Link to="/search" className="sidebar-button">Search</Link>
             <Link to="/profile" className="sidebar-button">Profile</Link>
-            <Link to="/followers" className="sidebar-button">Followers</Link>
-            <Link to="/following" className="sidebar-button">Following</Link>
             <Link to="/shopping-cart" className="frutiger-button px-4 py-2">Shopping Cart</Link>
           </nav>
         </div>
