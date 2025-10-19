@@ -9,28 +9,16 @@ import Following from './pages/following';
 import Profile from './pages/profile';
 import Search from './pages/search';
 import ShoppingCart from './pages/shopping-cart';
-
+import NavBar from '../components/NavBar';
 // Import your main CSS file
 import './App.css';
+
 
 function App() {
   return (
     <div className="flex flex-col h-screen">
       {/* HEADER */}
-      <header className="frutiger-panel m-4 p-4">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-white">FellowFinds</h1>
-          <nav className="flex items-center gap-6">
-            <Link to="/" className="sidebar-button">Home</Link>
-            <Link to="/explore" className="sidebar-button">Explore</Link>
-            <Link to="/search" className="sidebar-button">Search</Link>
-            <Link to="/profile" className="sidebar-button">Profile</Link>
-            <Link to="/followers" className="sidebar-button">Followers</Link>
-            <Link to="/following" className="sidebar-button">Following</Link>
-            <Link to="/shopping-cart" className="frutiger-button px-4 py-2">Shopping Cart</Link>
-          </nav>
-        </div>
-      </header>
+      <NavBar/>
 
       {/* Page Content */}
       <main className="flex-1 p-4 overflow-y-auto">
