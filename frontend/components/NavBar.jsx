@@ -2,17 +2,26 @@ import { Link } from "react-router-dom"
 
 export default function NavBar() {
     return (
-        <header className="frutiger-panel m-4 p-4">
+        <header className="bg-[#212D40] shadow-lg px-5">
                 <div className="flex justify-between items-center">
-                  <h1 className="text-2xl font-bold text-white">FellowFinds</h1>
+                  <h1 className="text-2xl font-weight-800 text-[#e0d9c8] select-none ">FellowFinds</h1>
                   <nav className="flex items-center gap-6">
-                    <Link to="/" className="sidebar-button">Home</Link>
-                    <Link to="/explore" className="sidebar-button">Explore</Link>
-                    <Link to="/search" className="sidebar-button">Search</Link>
-                    <Link to="/profile" className="sidebar-button">Profile</Link>
-                    <Link to="/shopping-cart" className="frutiger-button px-4 py-2">Shopping Cart</Link>
+                    <Link to="/" className="nav-button">Home</Link>
+                    <Link to="/explore" className="nav-button">Explore</Link>
+                    <Link to="/search" className="nav-button">Search</Link>
+                    <Link to="/profile" className="nav-button">Profile</Link>
+                    <Link to="/shopping-cart" className="nav-button">Shopping Cart</Link>
                   </nav>
                 </div>
               </header>
     )
 }
+/**
+ * #AFBBF2
+#DAD2BC
+#5B647E
+#364156
+#212D40
+#e0d9c8
+#5b647e78
+ */
