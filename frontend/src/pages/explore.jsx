@@ -1,40 +1,98 @@
-import React from "react";
+import React, { useState } from 'react';
+import PageContainer from '../components/layout/PageContainer';
+import ItemCard from '../components/features/ItemCard';
+import { listings, categories } from '../data/mockData';
 
-const listings = [
-  { id: 1, title: "Vintage Lamp", price: "$20", location: "2 miles away", image: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" },
-  { id: 2, title: "Mountain Bike", price: "$120", location: "5 miles away", image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" },
-  { id: 3, title: "Cookware Set", price: "$35", location: "1 mile away", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" },
-  { id: 4, title: "Desk Chair", price: "$15", location: "3 miles away", image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" },
-  { id: 5, title: "Board Games", price: "$10", location: "2 miles away", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" },
-  { id: 6, title: "Bookshelf", price: "$40", location: "4 miles away", image: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" },
-  { id: 7, title: "Coffee Table", price: "$25", location: "1 mile away", image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" },
-  { id: 8, title: "Cookware Set", price: "$35", location: "1 mile away", image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" },
-];
+const Explore = () => {
+  const [selectedLocation, setSelectedLocation] = useState('all');
 
-const Explore = () => (
-  <div className="container mx-auto">
-    <div className="frutiger-panel p-6">
-      <h2 className="text-3xl font-bold text-white mb-8 text-shadow-lg text-center">Explore Local Finds</h2>
-      <div className="grid grid-cols-4 gap-8">
-        {listings.map(item => (
-          <div key={item.id} className="bg-white/20 rounded-xl overflow-hidden group shadow-lg text-center flex flex-col">
-            <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden">
-              <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:opacity-80 transition-opacity" />
-            </div>
-            <div className="p-4 flex-grow flex flex-col justify-between">
-              <div>
-                <h3 className="font-bold text-lg text-white mb-2">{item.title}</h3>
-              </div>
-              <div>
-                <p className="text-gray-200 mb-1">{item.price}</p>
-                <span className="text-sm text-gray-300">{item.location}</span>
-              </div>
-            </div>
-          </div>
+  // Get unique locations
+  const locations = ['all', ...new Set(listings.map(item => item.location))];
+
+  // Filter by location
+  const filteredListings = selectedLocation === 'all' 
+    ? listings 
+    : listings.filter(item => item.location === selectedLocation);
+
+  return (
+    <PageContainer>
+      {/* Hero Banner */}
+      <div className="bg-gradient-to-r from-[#FF6B6B] to-[#4ECDC4] rounded-2xl p-12 mb-12 text-white text-center">
+        <h1 className="text-5xl font-bold mb-4">Explore Campus Marketplace</h1>
+        <p className="text-xl opacity-90">
+          Discover amazing deals from students across campus
+        </p>
+      </div>
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+        <div className="bg-white rounded-xl p-6 text-center shadow-md">
+          <div className="text-4xl font-bold text-[#4ECDC4] mb-2">{listings.length}</div>
+          <div className="text-gray-600">Active Listings</div>
+        </div>
+        <div className="bg-white rounded-xl p-6 text-center shadow-md">
+          <div className="text-4xl font-bold text-[#FF6B6B] mb-2">{categories.length}</div>
+          <div className="text-gray-600">Categories</div>
+        </div>
+        <div className="bg-white rounded-xl p-6 text-center shadow-md">
+          <div className="text-4xl font-bold text-[#0D1B2A] mb-2">{locations.length - 1}</div>
+          <div className="text-gray-600">Campus Locations</div>
+        </div>
+        <div className="bg-white rounded-xl p-6 text-center shadow-md">
+          <div className="text-4xl font-bold text-[#4ECDC4] mb-2">100%</div>
+          <div className="text-gray-600">Student Verified</div>
+        </div>
+      </div>
+
+      {/* Categories Grid */}
+      <div className="mb-12">
+        <h2 className="text-3xl font-bold text-[#0D1B2A] mb-6">Browse by Category</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {categories.map(category => {
+            const categoryCount = listings.filter(item => item.category === category.name).length;
+            return (
+              <button
+                key={category.id}
+                className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all text-center group"
+              >
+                <div className="text-5xl mb-3 group-hover:scale-110 transition-transform">
+                  {category.icon}
+                </div>
+                <h3 className="font-bold text-[#0D1B2A] mb-1">{category.name}</h3>
+                <p className="text-sm text-gray-500">{categoryCount} items</p>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Location Filter */}
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-3xl font-bold text-[#0D1B2A]">All Items</h2>
+        <div className="flex items-center gap-3">
+          <label className="font-medium text-[#0D1B2A]">Filter by location:</label>
+          <select
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
+            className="bg-white border-2 border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-[#4ECDC4]"
+          >
+            {locations.map(location => (
+              <option key={location} value={location}>
+                {location === 'all' ? 'All Locations' : location}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Items Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {filteredListings.map(item => (
+          <ItemCard key={item.id} item={item} />
         ))}
       </div>
-    </div>
-  </div>
-);
+    </PageContainer>
+  );
+};
 
 export default Explore;
