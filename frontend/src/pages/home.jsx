@@ -1,29 +1,73 @@
-import React from 'react';
-
-// Sample data for the items
-const recommendedItems = [
-  { id: 1, name: 'Vintage Lamp', image: 'https://images.unsplash.com/photo-1589584693689-0663b88b7f3b?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-  { id: 2, name: 'Mountain Bike', image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-  { id: 3, name: 'Leather Chair', image: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-  { id: 4, name: 'House Plant', image: 'https://images.unsplash.com/photo-1512428813834-c702c7702b78?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600' },
-];
+import React, { useState } from 'react';
+import ItemCard from '../components/features/ItemCard';
+import { listings, categories } from '../data/mockData';
 
 const Home = () => {
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [sortBy, setSortBy] = useState('recent');
+
+  // Filter and sort listings
+  const filteredListings = listings
+    .filter(item => !selectedCategory || item.category === selectedCategory)
+    .sort((a, b) => {
+      if (sortBy === 'price-low') return a.price - b.price;
+      if (sortBy === 'price-high') return b.price - a.price;
+      if (sortBy === 'recent') return new Date(b.postedDate) - new Date(a.postedDate);
+      return 0;
+    });
+
   return (
-    <div className="container mx-auto">
-      <div className="frutiger-panel p-6">
-        <h2 className="text-2xl font-bold text-white mb-6 text-shadow-lg">Recommended for Today</h2>
-        <div className="grid grid-cols-4 gap-8">
-          {recommendedItems.map((item) => (
-            <div key={item.id} className="bg-white/20 rounded-xl overflow-hidden group shadow-lg flex flex-col">
-              <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden">
-                <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:opacity-80 transition-opacity" />
-              </div>
-              <div className="p-4">
-                <h3 className="font-semibold text-lg text-white">{item.name}</h3>
-              </div>
+    <div 
+      className="min-h-screen flex justify-center"
+      style={{
+        background: '#e9f2f9ff'
+      }}
+    >
+      {/* Centered content container */}
+      <div className="w-full max-w-[1400px] px-6 py-8">
+    
+
+        {/* Filters Bar */}
+        <div className="flex justify-between items-center mb-8">
+          <p className="text-gray-700 text-base font-semibold tracking-wide">
+            {filteredListings.length} {filteredListings.length === 1 ? 'ITEM' : 'ITEMS'}
+          </p>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="border-2 border-gray-300 rounded-full px-5 py-2.5 text-sm font-medium tracking-wide focus:outline-none bg-white transition-all duration-300"
+            style={{
+              borderColor: '#E5E7EB',
+            }}
+          >
+            <option value="recent">MOST RECENT</option>
+            <option value="price-low">PRICE: LOW TO HIGH</option>
+            <option value="price-high">PRICE: HIGH TO LOW</option>
+          </select>
+        </div>
+
+        {/* Items Grid - Perfectly Centered */}
+        <div 
+          className="rounded-3xl p-8"
+          style={{
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.5) 100%)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+          }}
+        >
+          {filteredListings.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
+              {filteredListings.map(item => (
+                <ItemCard key={item.id} item={item} />
+              ))}
             </div>
-          ))}
+          ) : (
+            <div className="text-center py-20">
+              <p className="text-xl text-gray-500 font-semibold tracking-wide">
+                NO ITEMS FOUND. TRY ADJUSTING YOUR FILTERS!
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

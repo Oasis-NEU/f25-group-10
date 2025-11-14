@@ -1,0 +1,79 @@
+@import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
+
+/* Color Palette Variables */
+:root {
+  --color-primary: #00AEEF;
+  --color-accent: #FF6F61;
+  --color-mint: #4ECDC4;
+  --color-bg: #F7F7F8;
+  --color-text: #1A1A1A;
+}
+
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Oswald', sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Ensure content is above any patterns */
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header font family */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Remove default button styles */
+button {
+  font-family: 'Oswald', sans-serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e9f2f9ff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* Glow effect utility */
+.glow-focus {
+  transition: all 0.3s ease;
+}
+
+.glow-focus:focus {
+  box-shadow: 0 0 0 4px rgba(0, 174, 239, 0.2), 0 0 20px rgba(0, 174, 239, 0.15);
+}

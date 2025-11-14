@@ -1,38 +1,30 @@
 import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
-
-// Import all your page components
-import Home from './pages/home';
-import Explore from './pages/explore';
-import Followers from './pages/followers';
-import Following from './pages/following';
-import Profile from './pages/profile';
-import Search from './pages/search';
-import ShoppingCart from './pages/shopping-cart';
-import NavBar from '../components/NavBar';
-// Import your main CSS file
-import './App.css';
-
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import NavBar from './components/shared/NavBar';
+import Home from './pages/Home';
+import ItemDetail from './pages/ItemDetail';
+import Profile from './pages/Profile';
+import Search from './pages/Search';
+import Cart from './pages/Cart';
+import Explore from './pages/Explore';
+import PostItem from './pages/PostItem';
 
 function App() {
   return (
-    <div className="flex flex-col h-screen">
-      {/* HEADER */}
-      <NavBar/>
-
-      {/* Page Content */}
-      <main className="flex-1 p-4 overflow-y-auto">
+    <Router>
+      <div className="min-h-screen">
+        <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
-          <Route path="/followers" element={<Followers />} />
-          <Route path="/following" element={<Following />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/shopping-cart" element={<ShoppingCart />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/item/:id" element={<ItemDetail />} />
+          <Route path="/post-item" element={<PostItem />} />
         </Routes>
-      </main>
-    </div>
+      </div>
+    </Router>
   );
 }
 
