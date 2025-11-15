@@ -1,12 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ItemCard from '../components/features/ItemCard';
-import { listings, categories } from '../data/mockData';
+import { getListings } from '../api';
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [sortBy, setSortBy] = useState('recent');
+  const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Filter and sort listings
+  useEffect(() => {
+    const loadListings = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await getListings();
+        setListings(data || []);
+      } catch (err) {
+        console.error('Failed to load listings', err);
+        setError('Failed to load items. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadListings();
+  }, []);
+
   const filteredListings = listings
     .filter(item => !selectedCategory || item.category === selectedCategory)
     .sort((a, b) => {
@@ -17,20 +36,21 @@ const Home = () => {
     });
 
   return (
-    <div 
+    <div
       className="min-h-screen flex justify-center"
       style={{
-        background: '#e9f2f9ff'
+        background: '#e9f2f9ff',
       }}
     >
-      {/* Centered content container */}
       <div className="w-full max-w-[1400px] px-6 py-8">
-    
-
         {/* Filters Bar */}
         <div className="flex justify-between items-center mb-8">
           <p className="text-gray-700 text-base font-semibold tracking-wide">
-            {filteredListings.length} {filteredListings.length === 1 ? 'ITEM' : 'ITEMS'}
+            {loading
+              ? 'LOADING ITEMS...'
+              : `${filteredListings.length} ${
+                  filteredListings.length === 1 ? 'ITEM' : 'ITEMS'
+                }`}
           </p>
           <select
             value={sortBy}
@@ -46,18 +66,31 @@ const Home = () => {
           </select>
         </div>
 
-        {/* Items Grid - Perfectly Centered */}
-        <div 
+        {/* Items Grid */}
+        <div
           className="rounded-3xl p-8"
           style={{
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.5) 100%)',
+            background:
+              'linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.5) 100%)',
             backdropFilter: 'blur(10px)',
             WebkitBackdropFilter: 'blur(10px)',
           }}
         >
-          {filteredListings.length > 0 ? (
+          {loading ? (
+            <div className="text-center py-20">
+              <p className="text-xl text-gray-500 font-semibold tracking-wide">
+                LOADING ITEMS...
+              </p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-20">
+              <p className="text-xl text-red-500 font-semibold tracking-wide">
+                {error}
+              </p>
+            </div>
+          ) : filteredListings.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
-              {filteredListings.map(item => (
+              {filteredListings.map((item) => (
                 <ItemCard key={item.id} item={item} />
               ))}
             </div>

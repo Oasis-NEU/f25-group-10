@@ -1,10 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageContainer from '../components/layout/PageContainer';
-import { categories } from '../data/mockData';
+import { getCategories, createListing } from '../api';
+
+// We still use a local list of conditions/locations
+const conditions = ['New', 'Used - Like New', 'Used - Good', 'Used - Fair'];
+const locations = [
+  'North Campus',
+  'South Campus',
+  'East Campus',
+  'West Campus',
+  'Central Library',
+];
 
 const PostItem = () => {
   const navigate = useNavigate();
+  const [categories, setCategories] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     price: '',
@@ -14,13 +25,25 @@ const PostItem = () => {
     description: '',
   });
   const [imagePreview, setImagePreview] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const conditions = ['New', 'Used - Like New', 'Used - Good', 'Used - Fair'];
-  const locations = ['North Campus', 'South Campus', 'East Campus', 'West Campus', 'Central Library'];
+  // Lazy-load categories when needed (first render)
+  React.useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await getCategories();
+        setCategories(data || []);
+      } catch (err) {
+        console.error('Failed to load categories', err);
+        setCategories([]);
+      }
+    };
+    loadCategories();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageUpload = (e) => {
@@ -28,31 +51,61 @@ const PostItem = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result);
+        setImagePreview(reader.result); // base64 data URL
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // In real app, this would send to backend
-    console.log('Posting item:', formData);
-    alert('Item posted successfully!');
-    navigate('/profile');
+    if (!isFormValid) return;
+    setSubmitting(true);
+
+    try {
+      // For now, send imagePreview as image field directly
+      await createListing({
+        title: formData.title,
+        price: Number(formData.price),
+        category: formData.category,
+        condition: formData.condition,
+        location: formData.location,
+        description: formData.description,
+        image: imagePreview, // backend should store as image_url
+      });
+      alert('Item posted successfully!');
+      navigate('/profile');
+    } catch (err) {
+      console.error('Failed to post item', err);
+      alert('Failed to post item. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  const isFormValid = formData.title && formData.price && formData.category && 
-                      formData.condition && formData.location && formData.description;
+  const isFormValid =
+    formData.title &&
+    formData.price &&
+    formData.category &&
+    formData.condition &&
+    formData.location &&
+    formData.description;
 
   return (
     <PageContainer>
-      <div className="min-h-screen flex justify-center items-start" style={{ background: 'white' }}>
+      <div
+        className="min-h-screen flex justify-center items-start"
+        style={{ background: 'white' }}
+      >
         <div className="max-w-3xl w-full px-6 py-12">
           {/* Header */}
           <div className="mb-12 text-center">
-            <h1 className="text-4xl font-light text-black mb-2">Post a New Item</h1>
-            <p className="text-gray-600 font-light">Fill in the details to list your item</p>
+            <h1 className="text-4xl font-light text-black mb-2">
+              Post a New Item
+            </h1>
+            <p className="text-gray-600 font-light">
+              Fill in the details to list your item
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
@@ -64,7 +117,11 @@ const PostItem = () => {
               <div className="border-2 border-dashed border-gray-300 p-8 text-center hover:border-black transition-colors">
                 {imagePreview ? (
                   <div className="relative">
-                    <img src={imagePreview} alt="Preview" className="max-h-64 mx-auto" />
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="max-h-64 mx-auto"
+                    />
                     <button
                       type="button"
                       onClick={() => setImagePreview(null)}
@@ -75,8 +132,9 @@ const PostItem = () => {
                   </div>
                 ) : (
                   <div>
-                    <div className="text-6xl mb-4"></div>
-                    <p className="text-gray-600 font-light mb-4">Click to upload or drag and drop</p>
+                    <p className="text-gray-600 font-light mb-4">
+                      Click to upload or drag and drop
+                    </p>
                     <input
                       type="file"
                       accept="image/*"
@@ -97,8 +155,10 @@ const PostItem = () => {
 
             {/* Basic Info */}
             <div className="bg-white p-6 space-y-6">
-              <h3 className="text-lg font-light text-black mb-6">Basic Information</h3>
-              
+              <h3 className="text-lg font-light text-black mb-6">
+                Basic Information
+              </h3>
+
               <div>
                 <label className="block text-sm font-light text-gray-700 mb-2">
                   Item Title *
@@ -143,7 +203,7 @@ const PostItem = () => {
                     className="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-black font-light"
                   >
                     <option value="">Select category</option>
-                    {categories.map(cat => (
+                    {(categories || []).map((cat) => (
                       <option key={cat.id} value={cat.name}>
                         {cat.icon} {cat.name}
                       </option>
@@ -163,8 +223,10 @@ const PostItem = () => {
                     className="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-black font-light"
                   >
                     <option value="">Select condition</option>
-                    {conditions.map(cond => (
-                      <option key={cond} value={cond}>{cond}</option>
+                    {conditions.map((cond) => (
+                      <option key={cond} value={cond}>
+                        {cond}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -182,8 +244,10 @@ const PostItem = () => {
                   className="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-black font-light"
                 >
                   <option value="">Select location</option>
-                  {locations.map(loc => (
-                    <option key={loc} value={loc}>{loc}</option>
+                  {locations.map((loc) => (
+                    <option key={loc} value={loc}>
+                      {loc}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -216,14 +280,14 @@ const PostItem = () => {
               </button>
               <button
                 type="submit"
-                disabled={!isFormValid}
+                disabled={!isFormValid || submitting}
                 className={`flex-1 py-4 font-light transition-all ${
-                  isFormValid
+                  isFormValid && !submitting
                     ? 'bg-black text-white hover:bg-gray-800'
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
-                Post Item
+                {submitting ? 'Posting...' : 'Post Item'}
               </button>
             </div>
           </form>

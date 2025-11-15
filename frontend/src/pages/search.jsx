@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import PageContainer from '../components/layout/PageContainer';
 import ItemCard from '../components/features/ItemCard';
 import CategoryFilter from '../components/features/CategoryFilter';
-import { listings, categories } from '../data/mockData';
+import { getListings, getCategories } from '../api';
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -11,28 +11,53 @@ const Search = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [priceRange, setPriceRange] = useState('all');
   const [sortBy, setSortBy] = useState('recent');
+  const [allListings, setAllListings] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Update query from URL params
+  // sync query with URL
   useEffect(() => {
     setQuery(searchParams.get('q') || '');
   }, [searchParams]);
 
-  // Filter and sort results
-  const searchResults = listings
-    .filter(item => {
-      // Search query filter
-      const matchesQuery = query === '' || 
+  // load listings + categories once
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const [listingsData, categoriesData] = await Promise.all([
+          getListings(),
+          getCategories(),
+        ]);
+        setAllListings(listingsData || []);
+        setCategories(categoriesData || []);
+      } catch (err) {
+        console.error('Failed to load search data', err);
+        setError('Failed to load items. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  const searchResults = allListings
+    .filter((item) => {
+      const matchesQuery =
+        !query ||
         item.title.toLowerCase().includes(query.toLowerCase()) ||
         item.description.toLowerCase().includes(query.toLowerCase()) ||
         item.category.toLowerCase().includes(query.toLowerCase());
 
-      // Category filter
-      const matchesCategory = !selectedCategory || item.category === selectedCategory;
+      const matchesCategory =
+        !selectedCategory || item.category === selectedCategory;
 
-      // Price range filter
       let matchesPrice = true;
       if (priceRange === 'under50') matchesPrice = item.price < 50;
-      if (priceRange === '50to100') matchesPrice = item.price >= 50 && item.price <= 100;
+      if (priceRange === '50to100')
+        matchesPrice = item.price >= 50 && item.price <= 100;
       if (priceRange === 'over100') matchesPrice = item.price > 100;
 
       return matchesQuery && matchesCategory && matchesPrice;
@@ -40,23 +65,33 @@ const Search = () => {
     .sort((a, b) => {
       if (sortBy === 'price-low') return a.price - b.price;
       if (sortBy === 'price-high') return b.price - a.price;
-      if (sortBy === 'recent') return new Date(b.postedDate) - new Date(a.postedDate);
+      if (sortBy === 'recent')
+        return new Date(b.postedDate) - new Date(a.postedDate);
       return 0;
     });
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setSearchParams({ q: query });
+    if (query) {
+      setSearchParams({ q: query });
+    } else {
+      setSearchParams({});
+    }
   };
 
   return (
     <PageContainer>
-      <div className="min-h-screen flex justify-center" style={{ background: 'white' }}>
+      <div
+        className="min-h-screen flex justify-center"
+        style={{ background: 'white' }}
+      >
         <div className="max-w-6xl w-full px-6 py-12">
           {/* Search Header */}
           <div className="mb-16 text-center">
-            <h1 className="text-2xl font-light text-black mb-6 tracking-wide">Search Items</h1>
-            
+            <h1 className="text-2xl font-light text-black mb-6 tracking-wide">
+              Search Items
+            </h1>
+
             {/* Search Bar */}
             <form onSubmit={handleSearch} className="mb-6">
               <div className="flex gap-3 bg-white border border-gray-300">
@@ -77,9 +112,13 @@ const Search = () => {
             </form>
 
             {/* Results Count */}
-            {query && (
+            {query && !loading && (
               <p className="text-gray-600 font-light text-sm">
-                Found <span className="font-normal text-black">{searchResults.length}</span> results for "{query}"
+                Found{' '}
+                <span className="font-normal text-black">
+                  {searchResults.length}
+                </span>{' '}
+                results for "{query}"
               </p>
             )}
           </div>
@@ -94,7 +133,9 @@ const Search = () => {
           {/* Filters & Sort */}
           <div className="flex flex-wrap gap-6 mb-12 items-center justify-center">
             <div className="flex items-center gap-3">
-              <label className="font-light text-gray-600 text-sm">Price:</label>
+              <label className="font-light text-gray-600 text-sm">
+                Price:
+              </label>
               <select
                 value={priceRange}
                 onChange={(e) => setPriceRange(e.target.value)}
@@ -108,7 +149,9 @@ const Search = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              <label className="font-light text-gray-600 text-sm">Sort by:</label>
+              <label className="font-light text-gray-600 text-sm">
+                Sort by:
+              </label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
@@ -120,7 +163,6 @@ const Search = () => {
               </select>
             </div>
 
-            {/* Clear Filters */}
             {(selectedCategory || priceRange !== 'all' || query) && (
               <button
                 onClick={() => {
@@ -137,15 +179,25 @@ const Search = () => {
           </div>
 
           {/* Results Grid */}
-          {searchResults.length > 0 ? (
+          {loading ? (
+            <div className="text-center py-12">
+              <p className="text-gray-500">Loading results...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <p className="text-red-500">{error}</p>
+            </div>
+          ) : searchResults.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
-              {searchResults.map(item => (
+              {searchResults.map((item) => (
                 <ItemCard key={item.id} item={item} />
               ))}
             </div>
           ) : (
             <div className="bg-white border border-gray-200 p-12 text-center">
-              <h3 className="text-xl font-light text-black mb-3 tracking-wide">No Results Found</h3>
+              <h3 className="text-xl font-light text-black mb-3 tracking-wide">
+                No Results Found
+              </h3>
               <p className="text-gray-600 font-light mb-8 text-sm">
                 Try adjusting your search terms or filters
               </p>
