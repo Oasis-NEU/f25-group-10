@@ -3,14 +3,14 @@ import React from 'react';
 const CategoryFilter = ({ categories, selectedCategory, onCategorySelect }) => {
   return (
     <div className="mb-12">
-      <h3 className="text-xl font-semibold text-[#0D1B2A] mb-4">Categories</h3>
-      <div className="flex flex-wrap gap-3">
+      <h3 className="text-lg font-light text-black mb-4 text-center tracking-wide">Categories</h3>
+      <div className="flex flex-wrap gap-6 justify-center">
         <button
           onClick={() => onCategorySelect(null)}
-          className={`px-5 py-3 rounded-full font-medium transition-all ${
+          className={`pb-2 font-light transition-all text-sm tracking-wide ${
             selectedCategory === null
-              ? 'bg-[#0D1B2A] text-white shadow-lg'
-              : 'bg-white text-gray-700 hover:bg-gray-100'
+              ? 'text-black border-b-2 border-black'
+              : 'text-gray-500 hover:text-black'
           }`}
         >
           All Items
@@ -19,13 +19,12 @@ const CategoryFilter = ({ categories, selectedCategory, onCategorySelect }) => {
           <button
             key={category.id}
             onClick={() => onCategorySelect(category.name)}
-            className={`px-5 py-3 rounded-full font-medium transition-all flex items-center gap-2 ${
+            className={`pb-2 font-light transition-all text-sm tracking-wide ${
               selectedCategory === category.name
-                ? 'bg-[#4ECDC4] text-white shadow-lg'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
+                ? 'text-black border-b-2 border-black'
+                : 'text-gray-500 hover:text-black'
             }`}
           >
-            <span className="text-xl">{category.icon}</span>
             {category.name}
           </button>
         ))}
