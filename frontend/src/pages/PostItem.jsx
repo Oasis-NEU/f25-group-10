@@ -47,185 +47,187 @@ const PostItem = () => {
 
   return (
     <PageContainer>
-      <div className="max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-[#0D1B2A] mb-2">Post a New Item</h1>
-          <p className="text-gray-600">Fill in the details to list your item</p>
-        </div>
+      <div className="min-h-screen flex justify-center items-start" style={{ background: 'white' }}>
+        <div className="max-w-3xl w-full px-6 py-12">
+          {/* Header */}
+          <div className="mb-12 text-center">
+            <h1 className="text-4xl font-light text-black mb-2">Post a New Item</h1>
+            <p className="text-gray-600 font-light">Fill in the details to list your item</p>
+          </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Image Upload */}
-          <div className="bg-white rounded-xl p-6 shadow-md">
-            <label className="block text-lg font-semibold text-[#0D1B2A] mb-4">
-              Item Photo
-            </label>
-            <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-[#4ECDC4] transition-colors">
-              {imagePreview ? (
-                <div className="relative">
-                  <img src={imagePreview} alt="Preview" className="max-h-64 mx-auto rounded-lg" />
-                  <button
-                    type="button"
-                    onClick={() => setImagePreview(null)}
-                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ) : (
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Image Upload */}
+            <div className="bg-white p-6">
+              <label className="block text-lg font-light text-black mb-4">
+                Item Photo
+              </label>
+              <div className="border-2 border-dashed border-gray-300 p-8 text-center hover:border-black transition-colors">
+                {imagePreview ? (
+                  <div className="relative">
+                    <img src={imagePreview} alt="Preview" className="max-h-64 mx-auto" />
+                    <button
+                      type="button"
+                      onClick={() => setImagePreview(null)}
+                      className="absolute top-2 right-2 bg-black text-white p-2 hover:bg-gray-800"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="text-6xl mb-4"></div>
+                    <p className="text-gray-600 font-light mb-4">Click to upload or drag and drop</p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      id="image-upload"
+                    />
+                    <label
+                      htmlFor="image-upload"
+                      className="inline-block bg-black text-white px-6 py-2 font-light cursor-pointer hover:bg-gray-800 transition-colors"
+                    >
+                      Choose Image
+                    </label>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Basic Info */}
+            <div className="bg-white p-6 space-y-6">
+              <h3 className="text-lg font-light text-black mb-6">Basic Information</h3>
+              
+              <div>
+                <label className="block text-sm font-light text-gray-700 mb-2">
+                  Item Title *
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  placeholder="e.g., Mid-Century Modern Desk"
+                  required
+                  className="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-black font-light"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-light text-gray-700 mb-2">
+                  Price ($) *
+                </label>
+                <input
+                  type="number"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                  placeholder="0"
+                  required
+                  min="0"
+                  className="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-black font-light"
+                />
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <div className="text-6xl mb-4">📸</div>
-                  <p className="text-gray-600 mb-4">Click to upload or drag and drop</p>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                    id="image-upload"
-                  />
-                  <label
-                    htmlFor="image-upload"
-                    className="inline-block bg-[#4ECDC4] text-white px-6 py-2 rounded-lg font-semibold cursor-pointer hover:bg-[#4ECDC4]/90 transition-colors"
-                  >
-                    Choose Image
+                  <label className="block text-sm font-light text-gray-700 mb-2">
+                    Category *
                   </label>
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                    required
+                    className="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-black font-light"
+                  >
+                    <option value="">Select category</option>
+                    {categories.map(cat => (
+                      <option key={cat.id} value={cat.name}>
+                        {cat.icon} {cat.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-              )}
-            </div>
-          </div>
 
-          {/* Basic Info */}
-          <div className="bg-white rounded-xl p-6 shadow-md space-y-4">
-            <h3 className="text-lg font-semibold text-[#0D1B2A] mb-4">Basic Information</h3>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Item Title *
-              </label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                placeholder="e.g., Mid-Century Modern Desk"
-                required
-                className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#4ECDC4]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Price ($) *
-              </label>
-              <input
-                type="number"
-                name="price"
-                value={formData.price}
-                onChange={handleChange}
-                placeholder="0"
-                required
-                min="0"
-                className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#4ECDC4]"
-              />
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Category *
-                </label>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  required
-                  className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#4ECDC4]"
-                >
-                  <option value="">Select category</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.name}>
-                      {cat.icon} {cat.name}
-                    </option>
-                  ))}
-                </select>
+                <div>
+                  <label className="block text-sm font-light text-gray-700 mb-2">
+                    Condition *
+                  </label>
+                  <select
+                    name="condition"
+                    value={formData.condition}
+                    onChange={handleChange}
+                    required
+                    className="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-black font-light"
+                  >
+                    <option value="">Select condition</option>
+                    {conditions.map(cond => (
+                      <option key={cond} value={cond}>{cond}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Condition *
+                <label className="block text-sm font-light text-gray-700 mb-2">
+                  Meet-up Location *
                 </label>
                 <select
-                  name="condition"
-                  value={formData.condition}
+                  name="location"
+                  value={formData.location}
                   onChange={handleChange}
                   required
-                  className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#4ECDC4]"
+                  className="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-black font-light"
                 >
-                  <option value="">Select condition</option>
-                  {conditions.map(cond => (
-                    <option key={cond} value={cond}>{cond}</option>
+                  <option value="">Select location</option>
+                  {locations.map(loc => (
+                    <option key={loc} value={loc}>{loc}</option>
                   ))}
                 </select>
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Meet-up Location *
+            {/* Description */}
+            <div className="bg-white p-6">
+              <label className="block text-sm font-light text-gray-700 mb-2">
+                Description *
               </label>
-              <select
-                name="location"
-                value={formData.location}
+              <textarea
+                name="description"
+                value={formData.description}
                 onChange={handleChange}
+                placeholder="Describe your item in detail..."
                 required
-                className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#4ECDC4]"
+                rows="6"
+                className="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-black font-light"
+              />
+            </div>
+
+            {/* Submit Buttons */}
+            <div className="flex gap-4">
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className="flex-1 bg-gray-200 text-gray-700 py-4 font-light hover:bg-gray-300 transition-colors"
               >
-                <option value="">Select location</option>
-                {locations.map(loc => (
-                  <option key={loc} value={loc}>{loc}</option>
-                ))}
-              </select>
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={!isFormValid}
+                className={`flex-1 py-4 font-light transition-all ${
+                  isFormValid
+                    ? 'bg-black text-white hover:bg-gray-800'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                Post Item
+              </button>
             </div>
-          </div>
-
-          {/* Description */}
-          <div className="bg-white rounded-xl p-6 shadow-md">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Description *
-            </label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Describe your item in detail..."
-              required
-              rows="6"
-              className="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#4ECDC4]"
-            />
-          </div>
-
-          {/* Submit Buttons */}
-          <div className="flex gap-4">
-            <button
-              type="button"
-              onClick={() => navigate(-1)}
-              className="flex-1 bg-gray-200 text-gray-700 py-4 rounded-xl font-semibold hover:bg-gray-300 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={!isFormValid}
-              className={`flex-1 py-4 rounded-xl font-semibold transition-all ${
-                isFormValid
-                  ? 'bg-gradient-to-r from-[#FF6B6B] to-[#4ECDC4] text-white hover:shadow-xl'
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              }`}
-            >
-              Post Item
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </PageContainer>
   );
