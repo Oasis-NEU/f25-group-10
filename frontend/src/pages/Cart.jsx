@@ -1,96 +1,127 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import PageContainer from '../components/layout/PageContainer';
-import { currentUser, listings } from '../data/mockData';
+import React from "react";
+import { Link } from "react-router-dom";
+import PageContainer from "../components/layout/PageContainer";
+import { currentUser, listings } from "../data/mockData";
 
 const Cart = () => {
-  // Get saved items
-  const savedItems = listings.filter(item => currentUser.savedItems.includes(item.id));
-
-  // Calculate total if user wants to see combined price
+  const savedItems = listings.filter((item) =>
+    currentUser.savedItems.includes(item.id)
+  );
   const totalPrice = savedItems.reduce((sum, item) => sum + item.price, 0);
 
   return (
-    <PageContainer>
-      <div className="max-w-6xl mx-auto">
+    <PageContainer className="bg-gray-50">
+      <div className="max-w-6xl mx-auto px-6 flex flex-col gap-5 py-12">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-wrap items-end justify-between">
           <div>
-            <h1 className="text-4xl font-bold text-[#0D1B2A] mb-2">Saved Items</h1>
-            <p className="text-gray-600">Your favorite finds in one place</p>
+            <h1 className="text-5xl font-bold text-gray-900 mb-2">
+              Saved Items
+            </h1>
+            <p className="text-lg text-gray-600">
+              Your favorite finds in one place
+            </p>
           </div>
+
           {savedItems.length > 0 && (
-            <div className="text-right">
-              <div className="text-sm text-gray-600 mb-1">Total Value</div>
-              <div className="text-3xl font-bold text-[#4ECDC4]">${totalPrice}</div>
+            <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow text-center  min-w-[220px]">
+              <p className="text-xs uppercase text-gray-500 font-semibold mb-1">
+                Total Value
+              </p>
+              <p className="text-4xl font-bold text-teal-600">${totalPrice}</p>
+              <p className="text-sm text-gray-500 mt-1">
+                {savedItems.length} {savedItems.length === 1 ? "item" : "items"}
+              </p>
             </div>
           )}
         </div>
 
+        {/* Items List */}
         {savedItems.length > 0 ? (
-          <div className="space-y-4">
-            {savedItems.map(item => (
-              <div key={item.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="flex gap-6 p-6">
+          <div className="flex flex-col gap-10">
+            {savedItems.map((item) => (
+              <div
+                key={item.id}
+                className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
+              >
+                <div className="flex flex-col md:flex-row">
                   {/* Image */}
-                  <Link to={`/item/${item.id}`} className="flex-shrink-0">
+                  <Link
+                    to={`/item/${item.id}`}
+                    className="group relative overflow-hidden w-full md:w-64 h-64 md:h-auto"
+                  >
                     <img
                       src={item.image}
                       alt={item.title}
-                      className="w-40 h-40 object-cover rounded-lg"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
+                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
                   </Link>
 
                   {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start mb-2">
-                      <Link to={`/item/${item.id}`}>
-                        <h3 className="text-2xl font-bold text-[#0D1B2A] hover:text-[#4ECDC4] transition-colors">
+                  <div className="flex-1 p-10 flex flex-col gap-6 max-w-4xl">
+                    {/* Title + Price */}
+                    <div className="flex justify-between gap-6">
+                      <Link to={`/item/${item.id}`} className="group flex-1">
+                        <h2 className="text-3xl font-bold text-gray-900 group-hover:text-teal-600 transition-colors">
                           {item.title}
-                        </h3>
+                        </h2>
                       </Link>
-                      <span className="text-3xl font-bold text-[#4ECDC4]">${item.price}</span>
+
+                      <p className="text-3xl font-bold text-teal-600 whitespace-nowrap mt-1">
+                        ${item.price}
+                      </p>
                     </div>
 
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="bg-[#4ECDC4]/20 text-[#0D1B2A] px-3 py-1 rounded-full text-sm font-semibold">
+                    {/* Meta */}
+                    <div className="flex items-center gap-4">
+                      <span className="bg-teal-100 text-teal-700 px-4 py-1.5 rounded-full text-sm font-semibold uppercase tracking-wide">
                         {item.category}
                       </span>
-                      <span className="text-gray-500 text-sm">📍 {item.location}</span>
+                      <span className="text-gray-600 text-sm font-medium">
+                        📍 {item.location}
+                      </span>
                     </div>
 
-                    <p className="text-gray-700 mb-4 line-clamp-2">{item.description}</p>
+                    {/* Description */}
+                    <p className="text-gray-700 text-[1.05rem] leading-[1.65]">
+                      {item.description}
+                    </p>
 
-                    {/* Seller Info */}
-                    <div className="flex items-center gap-3 mb-4">
-                      <img
-                        src={item.seller.avatar}
-                        alt={item.seller.name}
-                        className="w-10 h-10 rounded-full"
-                      />
-                      <div>
-                        <p className="font-medium text-gray-700">{item.seller.name}</p>
-                        <div className="flex items-center gap-1 text-sm">
-                          <span className="text-yellow-500">⭐</span>
-                          <span className="text-gray-600">{item.seller.rating}</span>
+                    {/* Bottom Section */}
+                    <div className="mt-auto pt-6 border-t border-gray-200 flex items-center justify-between">
+                      {/* Seller */}
+                      <div className="flex items-center gap-4">
+                        <img
+                          src={item.seller.avatar}
+                          alt={item.seller.name}
+                          className="w-12 h-12 rounded-full ring-2 ring-gray-100"
+                        />
+                        <div>
+                          <p className="font-semibold text-gray-900 text-lg">
+                            {item.seller.name}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            ⭐ {item.seller.rating} rating
+                          </p>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Action Buttons */}
-                    <div className="flex gap-3">
-                      <Link
-                        to={`/item/${item.id}`}
-                        className="flex-1 bg-[#FF6B6B] text-white py-2 px-4 rounded-lg font-semibold text-center hover:bg-[#FF6B6B]/90 transition-colors"
-                      >
-                        Contact Seller
-                      </Link>
-                      <button
-                        onClick={() => alert('Item removed from saved items')}
-                        className="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-semibold transition-colors"
-                      >
-                        Remove
-                      </button>
+                      {/* Buttons */}
+                      <div className="flex gap-4">
+                        <Link
+                          to={`/item/${item.id}`}
+                          className="bg-red-500 hover:bg-red-600 text-white px-6 py-2.5 rounded-lg font-semibold transition-all hover:scale-105 hover:shadow-lg"
+                        >
+                          Contact Seller
+                        </Link>
+                        <button
+                          onClick={() => alert("Item removed")}
+                          className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2.5 rounded-lg font-semibold transition-all hover:scale-105"
+                        >
+                          Remove
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -98,15 +129,18 @@ const Cart = () => {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-2xl p-16 text-center shadow-md">
-            <div className="text-8xl mb-6">❤️</div>
-            <h2 className="text-3xl font-bold text-[#0D1B2A] mb-4">No Saved Items Yet</h2>
-            <p className="text-gray-600 text-lg mb-8">
+          /* Empty State */
+          <div className="bg-white rounded-xl shadow-md p-16 text-center">
+            <p className="text-7xl mb-4 animate-pulse">❤️</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">
+              No Saved Items Yet
+            </h2>
+            <p className="text-gray-600 mb-6 text-lg">
               Start browsing and save items you're interested in!
             </p>
             <Link
               to="/"
-              className="inline-block bg-gradient-to-r from-[#FF6B6B] to-[#4ECDC4] text-white px-8 py-4 rounded-xl font-semibold hover:shadow-xl transition-all"
+              className="inline-block bg-gradient-to-r from-red-500 to-teal-600 text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all"
             >
               Browse Items
             </Link>
