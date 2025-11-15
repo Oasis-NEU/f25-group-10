@@ -51,116 +51,119 @@ const Search = () => {
 
   return (
     <PageContainer>
-      {/* Search Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-[#0D1B2A] mb-6">Search Items</h1>
-        
-        {/* Search Bar */}
-        <form onSubmit={handleSearch} className="mb-6">
-          <div className="flex gap-3 bg-white rounded-full shadow-lg p-2">
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search for textbooks, furniture, electronics..."
-              className="flex-1 px-6 py-3 rounded-full focus:outline-none text-gray-700"
-            />
-            <button
-              type="submit"
-              className="bg-gradient-to-r from-[#FF6B6B] to-[#4ECDC4] text-white px-8 py-3 rounded-full font-semibold hover:shadow-xl transition-all"
-            >
-              Search
-            </button>
+      <div className="min-h-screen flex justify-center" style={{ background: 'white' }}>
+        <div className="max-w-6xl w-full px-6 py-12">
+          {/* Search Header */}
+          <div className="mb-16 text-center">
+            <h1 className="text-2xl font-light text-black mb-6 tracking-wide">Search Items</h1>
+            
+            {/* Search Bar */}
+            <form onSubmit={handleSearch} className="mb-6">
+              <div className="flex gap-3 bg-white border border-gray-300">
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search for textbooks, furniture, electronics..."
+                  className="flex-1 px-6 py-4 focus:outline-none text-gray-700 font-light text-sm"
+                />
+                <button
+                  type="submit"
+                  className="bg-black text-white px-8 py-4 font-light text-sm hover:bg-gray-800 transition-all tracking-wide"
+                >
+                  Search
+                </button>
+              </div>
+            </form>
+
+            {/* Results Count */}
+            {query && (
+              <p className="text-gray-600 font-light text-sm">
+                Found <span className="font-normal text-black">{searchResults.length}</span> results for "{query}"
+              </p>
+            )}
           </div>
-        </form>
 
-        {/* Results Count */}
-        {query && (
-          <p className="text-gray-600">
-            Found <span className="font-bold text-[#0D1B2A]">{searchResults.length}</span> results for "{query}"
-          </p>
-        )}
+          {/* Categories */}
+          <CategoryFilter
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onCategorySelect={setSelectedCategory}
+          />
+
+          {/* Filters & Sort */}
+          <div className="flex flex-wrap gap-6 mb-12 items-center justify-center">
+            <div className="flex items-center gap-3">
+              <label className="font-light text-gray-600 text-sm">Price:</label>
+              <select
+                value={priceRange}
+                onChange={(e) => setPriceRange(e.target.value)}
+                className="bg-white border border-gray-300 px-4 py-2 focus:outline-none focus:border-black font-light text-sm"
+              >
+                <option value="all">All Prices</option>
+                <option value="under50">Under $50</option>
+                <option value="50to100">$50 - $100</option>
+                <option value="over100">Over $100</option>
+              </select>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <label className="font-light text-gray-600 text-sm">Sort by:</label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="bg-white border border-gray-300 px-4 py-2 focus:outline-none focus:border-black font-light text-sm"
+              >
+                <option value="recent">Most Recent</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+              </select>
+            </div>
+
+            {/* Clear Filters */}
+            {(selectedCategory || priceRange !== 'all' || query) && (
+              <button
+                onClick={() => {
+                  setSelectedCategory(null);
+                  setPriceRange('all');
+                  setQuery('');
+                  setSearchParams({});
+                }}
+                className="text-black hover:underline font-light text-sm"
+              >
+                Clear all filters
+              </button>
+            )}
+          </div>
+
+          {/* Results Grid */}
+          {searchResults.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+              {searchResults.map(item => (
+                <ItemCard key={item.id} item={item} />
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white border border-gray-200 p-12 text-center">
+              <h3 className="text-xl font-light text-black mb-3 tracking-wide">No Results Found</h3>
+              <p className="text-gray-600 font-light mb-8 text-sm">
+                Try adjusting your search terms or filters
+              </p>
+              <button
+                onClick={() => {
+                  setSelectedCategory(null);
+                  setPriceRange('all');
+                  setQuery('');
+                  setSearchParams({});
+                }}
+                className="bg-black text-white px-6 py-3 font-light text-sm hover:bg-gray-800 transition-colors tracking-wide"
+              >
+                Clear Filters
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-
-      {/* Categories */}
-      <CategoryFilter
-        categories={categories}
-        selectedCategory={selectedCategory}
-        onCategorySelect={setSelectedCategory}
-      />
-
-      {/* Filters & Sort */}
-      <div className="flex flex-wrap gap-4 mb-8 items-center">
-        <div className="flex items-center gap-2">
-          <label className="font-medium text-[#0D1B2A]">Price:</label>
-          <select
-            value={priceRange}
-            onChange={(e) => setPriceRange(e.target.value)}
-            className="bg-white border-2 border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-[#4ECDC4]"
-          >
-            <option value="all">All Prices</option>
-            <option value="under50">Under $50</option>
-            <option value="50to100">$50 - $100</option>
-            <option value="over100">Over $100</option>
-          </select>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <label className="font-medium text-[#0D1B2A]">Sort by:</label>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="bg-white border-2 border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-[#4ECDC4]"
-          >
-            <option value="recent">Most Recent</option>
-            <option value="price-low">Price: Low to High</option>
-            <option value="price-high">Price: High to Low</option>
-          </select>
-        </div>
-
-        {/* Clear Filters */}
-        {(selectedCategory || priceRange !== 'all' || query) && (
-          <button
-            onClick={() => {
-              setSelectedCategory(null);
-              setPriceRange('all');
-              setQuery('');
-              setSearchParams({});
-            }}
-            className="ml-auto text-[#FF6B6B] hover:underline font-medium"
-          >
-            Clear all filters
-          </button>
-        )}
-      </div>
-
-      {/* Results Grid */}
-      {searchResults.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {searchResults.map(item => (
-            <ItemCard key={item.id} item={item} />
-          ))}
-        </div>
-      ) : (
-        <div className="bg-white rounded-2xl p-12 text-center shadow-md">
-          <div className="text-6xl mb-4">🔍</div>
-          <h3 className="text-2xl font-bold text-[#0D1B2A] mb-2">No Results Found</h3>
-          <p className="text-gray-600 mb-6">
-            Try adjusting your search terms or filters
-          </p>
-          <button
-            onClick={() => {
-              setSelectedCategory(null);
-              setPriceRange('all');
-              setQuery('');
-              setSearchParams({});
-            }}
-            className="bg-[#4ECDC4] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#4ECDC4]/90 transition-colors"
-          >
-            Clear Filters
-          </button>
-        </div>
-      )}
     </PageContainer>
   );
 };

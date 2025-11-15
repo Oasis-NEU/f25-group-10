@@ -3,9 +3,9 @@
 
 /* Color Palette Variables */
 :root {
-  --color-primary: #00AEEF;
-  --color-accent: #FF6F61;
-  --color-mint: #4ECDC4;
+  --color-primary: #ffffff;
+  --color-accent: #b2b1b3;
+  --color-mint: #ffffff;
   --color-bg: #F7F7F8;
   --color-text: #1A1A1A;
 }
