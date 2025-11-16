@@ -68,7 +68,7 @@ const Profile = () => {
     <div
       className="min-h-screen flex justify-center items-start"
       style={{
-        background: 'white',
+        background: '#e0bebeff',
       }}
     >
       <div className="max-w-4xl w-full px-6 py-12">
@@ -128,11 +128,11 @@ const Profile = () => {
           {/* Stats (placeholder) */}
           <div className="flex items-center gap-16">
             <div className="text-center">
-              <div className="text-2xl font-light text-black">0</div>
+              <div className="text-2xl font-light text-black">100k</div>
               <div className="text-sm text-gray-600 font-light">Followers</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-light text-black">0</div>
+              <div className="text-2xl font-light text-black">10</div>
               <div className="text-sm text-gray-600 font-light">Following</div>
             </div>
           </div>
@@ -145,7 +145,7 @@ const Profile = () => {
           {/* Post Item Button */}
           <Link
             to="/post-item"
-            className="bg-black text-white px-8 py-3 font-light text-base hover:bg-gray-800 transition-all duration-300 flex items-center gap-2"
+            className="bg-white text-black px-8 py-3 font-light text-base hover:bg-red-800 transition-all duration-300 flex items-center gap-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

@@ -62,23 +62,25 @@ const Login = () => {
 
   return (
     <PageContainer>
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{ background: 'white' }}
-      >
-        <div className="w-full max-w-md px-6">
+        <div
+          className="min-h-screen flex items-center justify-center"
+          style={{
+            background: "linear-gradient(135deg, #a64444ff 0%, #c88282ff 50%, #C74F4F 100%)"
+          }}
+        >
+        <div className="w-full max-w-xl px-10">
           {/* Logo */}
           <div className="text-center mb-12">
             <Link to="/">
               <h1
-                className="text-2xl font-bold tracking-[0.3em] text-black mb-2"
+                className="text-3xl font-bold tracking-[0.3em] text-white mb-2"
                 style={{ letterSpacing: '0.3em' }}
               >
-                FELLOW FINDS
+                WELCOME BACK!
               </h1>
             </Link>
-            <p className="text-gray-600 font-light text-sm">
-              {isSignUp ? 'Create your account' : 'Welcome back'}
+            <p className="text-white font-light text-lg">
+              {isSignUp ? 'Create your account' : 'Your campus. Your marketplace.'}
             </p>
           </div>
 
@@ -87,7 +89,7 @@ const Login = () => {
             {/* Email (Sign Up only) */}
             {isSignUp && (
               <div>
-                <label className="block text-sm font-light text-black mb-2">
+                <label className="block text-lg font-light text-black mb-2">
                   Email
                 </label>
                 <input
@@ -96,7 +98,7 @@ const Login = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="your.email@university.edu"
-                  className="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-black font-light text-sm"
+                  className="w-full border border-gray-300 px-6 py-4 focus:outline-none focus:border-black font-light text-lg"
                   required={isSignUp}
                 />
               </div>
@@ -104,7 +106,7 @@ const Login = () => {
 
             {/* Username */}
             <div>
-              <label className="block text-sm font-light text-black mb-2">
+              <label className="block text-lg font-light text-white mb-2">
                 Username
               </label>
               <input
@@ -113,14 +115,14 @@ const Login = () => {
                 value={formData.username}
                 onChange={handleChange}
                 placeholder="username"
-                className="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-black font-light text-sm"
+                className="w-full border border-gray-300 px-6 py-4 focus:outline-none focus:border-black font-light text-lg"
                 required
               />
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-light text-black mb-2">
+              <label className="block text-lg font-light text-white mb-2">
                 Password
               </label>
               <input
@@ -129,7 +131,7 @@ const Login = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
-                className="w-full border border-gray-300 px-4 py-3 focus:outline-none focus:border-black font-light text-sm"
+                className="w-full border border-gray-300 px-6 py-4 focus:outline-none focus:border-black font-light text-lg"
                 required
               />
             </div>
@@ -137,7 +139,7 @@ const Login = () => {
             {/* Error Message */}
             {error && (
               <div className="bg-red-50 border border-red-200 px-4 py-3">
-                <p className="text-red-600 text-sm font-light">{error}</p>
+                <p className="text-red-600 text-lg font-light">{error}</p>
               </div>
             )}
 
@@ -145,10 +147,10 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-4 font-light text-sm tracking-wide transition-all ${
+              className={`w-full py-4 font-light text-lg tracking-wide transition-all ${
                 loading
                   ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-black text-white hover:bg-gray-800'
+                  : 'bg-[#8B0000] text-white hover:bg-[#660000]'
               }`}
             >
               {loading
@@ -161,14 +163,14 @@ const Login = () => {
 
           {/* Toggle Mode */}
           <div className="mt-8 text-center">
-            <p className="text-gray-600 font-light text-sm mb-3">
+            <p className="text-gray-100 font-light text-lg mb-3">
               {isSignUp
                 ? 'Already have an account?'
                 : "Don't have an account?"}
             </p>
             <button
               onClick={toggleMode}
-              className="text-black font-normal text-sm hover:underline"
+              className="text-[#660000] font-normal text-lg hover:underline"
             >
               {isSignUp ? 'Log In' : 'Sign Up'}
             </button>
@@ -178,7 +180,7 @@ const Login = () => {
           <div className="mt-8 text-center">
             <Link
               to="/"
-              className="text-gray-500 font-light text-sm hover:text-black transition-colors"
+              className="text-gray-100 font-light text-lg hover:text-black transition-colors"
             >
               ← Back to marketplace
             </Link>

@@ -39,7 +39,7 @@ const Home = () => {
     <div
       className="min-h-screen flex justify-center"
       style={{
-        background: '#e9f2f9ff',
+        background: '#e0bebeff',
       }}
     >
       <div className="w-full max-w-[1400px] px-6 py-8">
@@ -70,11 +70,8 @@ const Home = () => {
         <div
           className="rounded-3xl p-8"
           style={{
-            background:
-              'linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.5) 100%)',
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
-          }}
+  background: "linear-gradient(135deg, #ffffffff 0%, #c88282ff 50%, #C74F4F 100%)"
+    }}
         >
           {loading ? (
             <div className="text-center py-20">

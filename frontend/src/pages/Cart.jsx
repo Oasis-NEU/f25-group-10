@@ -45,7 +45,9 @@ const Cart = () => {
     <PageContainer>
       <div 
         className="min-h-screen flex justify-center items-start"
-        style={{ background: "white" }}
+        style={{
+  background: "linear-gradient(135deg, #ffffffff 0%, #ffffffff 50%, #ffffffff 100%)"
+}}
       >
         <div className="max-w-6xl w-full px-6 py-12">
           {/* Header */}
@@ -168,7 +170,7 @@ const Cart = () => {
                 </p>
                 <Link
                   to="/"
-                  className="inline-block bg-black text-white px-8 py-3 font-light hover:bg-gray-800 transition-all"
+                  className="inline-block bg-white text-red px-20 py-3 font-light hover:bg-red-800 transition-all"
                 >
                   Browse Items
                 </Link>

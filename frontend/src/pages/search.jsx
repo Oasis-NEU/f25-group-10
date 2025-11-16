@@ -82,7 +82,9 @@ const Search = () => {
     <PageContainer>
       <div
         className="min-h-screen flex justify-center"
-        style={{ background: "white" }}
+        style={{
+  background: "linear-gradient(135deg, #e8a4a4ff 0%, #c88282ff 50%, #7e3939ff 100%)"
+}}
       >
         <div className="max-w-6xl w-full px-6 py-12">
           {/* Search Header */}

@@ -19,7 +19,7 @@
 
 body {
   font-family: 'Oswald', sans-serif;
-  background: var(--color-bg);
+  background: linear-gradient(135deg, #a64444ff 0%, #c88282ff 50%, #C74F4F 100%);
   color: var(--color-text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
