@@ -6,11 +6,12 @@ import { getCategories, createListing } from '../api';
 // We still use a local list of conditions/locations
 const conditions = ['New', 'Used - Like New', 'Used - Good', 'Used - Fair'];
 const locations = [
-  'North Campus',
-  'South Campus',
-  'East Campus',
-  'West Campus',
+  'West Village',
+  'Snell Quad',
+  'Krentzman Quad',
+  'Centennial Commons',
   'Central Library',
+  'International Village',
 ];
 
 const PostItem = () => {

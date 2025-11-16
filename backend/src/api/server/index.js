@@ -5,6 +5,7 @@ import cors from 'cors';
 import listingsRouter from './routes/listings.js';
 import savedRouter from './routes/saved.js';
 import usersRouter from './routes/users.js';
+import categoriesRouter from './routes/categories.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 });
 
 // Routes
+app.use('/api/categories', categoriesRouter);
 app.use('/api/listings', listingsRouter);
 app.use('/api/saved', savedRouter);
 app.use('/api', usersRouter); // gives /api/me
