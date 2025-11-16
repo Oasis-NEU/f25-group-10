@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import PageContainer from '../components/layout/PageContainer';
 import { getListingById } from '../api';
+import PFP from '../assets/angel-pfp.jpg';
 
 const ItemDetail = () => {
   const { id } = useParams();
@@ -36,30 +37,39 @@ const ItemDetail = () => {
 
   if (loading) {
     return (
-      <PageContainer>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#e0bebeff' }}>
         <div className="text-center py-20">
-          <h2 className="text-2xl font-light text-[#0D1B2A]">Loading item...</h2>
+          <h2 className="text-2xl font-light text-black">Loading item...</h2>
         </div>
-      </PageContainer>
+      </div>
     );
   }
 
   if (error || !item) {
     return (
-      <PageContainer>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#e0bebeff' }}>
         <div className="text-center py-20">
-          <h2 className="text-3xl font-bold text-[#0D1B2A] mb-4">Item Not Found</h2>
-          <Link to="/" className="text-[#4ECDC4] hover:underline">
+          <h2 className="text-3xl font-light text-black mb-4">Item Not Found</h2>
+          <Link to="/" className="text-black hover:underline font-light">
             Return to Home
           </Link>
         </div>
-      </PageContainer>
+      </div>
     );
   }
 
+  // Mock seller data if not provided by API
+  const seller = item.seller || {
+    id: 1,
+    name: 'Angel El Moucary',
+    avatar: PFP,
+    rating: 4.8,
+    email: 'elmoucary.a@university.edu'
+  };
+
   return (
-    <PageContainer>
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen" style={{ background: '#e0bebeff' }}>
+      <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Back Button */}
         <Link
           to="/"
@@ -111,10 +121,10 @@ const ItemDetail = () => {
           </div>
 
           {/* Right: Details */}
-          <div className="flex flex-col justify-between min-h-screen py-8">
+          <div className="flex flex-col gap-8 py-8">
             {/* Category & Date */}
             <div className="flex items-center gap-3">
-              <span className="bg-gray-100 text-black px-4 py-1.5 text-sm font-light">
+              <span className="bg-[#e0bebeff] text-black px-4 py-1.5 text-sm font-light">
                 {item.category}
               </span>
               <span className="text-gray-500 text-sm font-light">
@@ -150,7 +160,7 @@ const ItemDetail = () => {
             {/* Add to Bag Button */}
             <button
               onClick={handleAddToBag}
-              className="w-full bg-black text-white py-4 font-light text-lg hover:bg-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              className="w-full bg-[#8B0000] text-white py-4 font-light text-lg hover:bg-[#660000] transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -164,53 +174,66 @@ const ItemDetail = () => {
             </button>
 
             {/* Item Details */}
-            <div className="bg-gray-50 p-6 space-y-5">
+            <div className="bg-[#e0bebeff] p-6 space-y-5">
               <h3 className="font-normal text-lg text-black mb-6">
                 Item Details
               </h3>
 
               <div className="space-y-5">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600 font-light">Condition:</span>
+                  <span className="text-black font-medium">Condition:</span>
                   <span className="font-normal text-black">
                     {item.condition}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600 font-light">Location:</span>
+                  <span className="text-black font-medium">Location:</span>
                   <span className="font-normal text-black">
                     📍 {item.location}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600 font-light">Meet-up:</span>
+                  <span className="text-black font-medium">Meet-up:</span>
                   <span className="font-normal text-black">On Campus</span>
                 </div>
               </div>
             </div>
 
             {/* Seller Information */}
-            <div className="bg-white border border-gray-200 p-6">
+            <div className="bg-[#e0bebeff]">
               <h3 className="font-normal text-lg text-black mb-4">
                 Seller Information
               </h3>
 
-              {item.seller && (
-                <button
-                  onClick={() => setShowSellerModal(true)}
-                  className="text-black font-normal hover:underline text-left"
-                >
-                  {item.seller.name}
-                </button>
-              )}
+              <div className="flex items-center gap-4">
+                <img
+                  src={seller.avatar}
+                  alt={seller.name}
+                  className="w-12 h-12 border-2 border-gray-200"
+                />
+                <div>
+                  <button
+                    onClick={() => setShowSellerModal(true)}
+                    className="text-black font-normal hover:underline text-left"
+                  >
+                    {seller.name}
+                  </button>
+                  <div className="flex items-center gap-1 mt-1">
+                    <span className="text-yellow-500 text-sm">⭐</span>
+                    <span className="font-light text-gray-700 text-sm">
+                      {seller.rating} rating
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Seller Modal */}
-        {showSellerModal && item.seller && (
+        {showSellerModal && (
           <div
             className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
             onClick={() => setShowSellerModal(false)}
@@ -239,21 +262,19 @@ const ItemDetail = () => {
               </div>
 
               <div className="flex items-center gap-4 mb-6">
-                {item.seller.avatar && (
-                  <img
-                    src={item.seller.avatar}
-                    alt={item.seller.name}
-                    className="w-20 h-20 border-2 border-gray-200"
-                  />
-                )}
+                <img
+                  src={seller.avatar}
+                  alt={seller.name}
+                  className="w-20 h-20 border-2 border-gray-200"
+                />
                 <div>
                   <p className="text-xl font-normal text-black mb-1">
-                    {item.seller.name}
+                    {seller.name}
                   </p>
                   <div className="flex items-center gap-2">
                     <span className="text-yellow-500">⭐</span>
                     <span className="font-light text-gray-700">
-                      {item.seller.rating} rating
+                      {seller.rating} rating
                     </span>
                   </div>
                 </div>
@@ -265,22 +286,15 @@ const ItemDetail = () => {
                     Email:
                   </p>
                   <a
-                    href={`mailto:${
-                      item.seller.email ||
-                      item.seller.name.toLowerCase().replace(' ', '.') +
-                        '@university.edu'
-                    }`}
+                    href={`mailto:${seller.email}`}
                     className="text-black font-normal hover:underline break-all"
                   >
-                    {item.seller.email ||
-                      `${item.seller.name
-                        .toLowerCase()
-                        .replace(' ', '.')}@university.edu`}
+                    {seller.email}
                   </a>
                 </div>
 
                 <Link
-                  to={`/profile/${item.seller.id}`}
+                  to={`/profile/${seller.id}`}
                   className="block w-full bg-black text-white py-3 text-center font-light hover:bg-gray-800 transition-colors"
                   onClick={() => setShowSellerModal(false)}
                 >
@@ -291,7 +305,7 @@ const ItemDetail = () => {
           </div>
         )}
       </div>
-    </PageContainer>
+    </div>
   );
 };
 

@@ -45,9 +45,7 @@ const Cart = () => {
     <PageContainer>
       <div 
         className="min-h-screen flex justify-center items-start"
-        style={{
-  background: "linear-gradient(135deg, #ffffffff 0%, #ffffffff 50%, #ffffffff 100%)"
-}}
+        style={{ background: "#e0bebeff" }}
       >
         <div className="max-w-6xl w-full px-6 py-12">
           {/* Header */}
@@ -62,8 +60,8 @@ const Cart = () => {
             </div>
 
             {!loading && savedItems.length > 0 && (
-              <div className="bg-white border border-gray-200 text-right px-5 py-3">
-                <p className="text-xs uppercase text-gray-500 font-light mb-1 tracking-wider">
+              <div className="text-right px-5 py-3" style={{ background: "transparent", border: "none" }}>
+                <p className="text-base uppercase text-black font-normal mb-1 tracking-wider">
                   Total Value
                 </p>
                 <p className="text-2xl font-light text-black mb-0.5">
@@ -90,9 +88,10 @@ const Cart = () => {
             <div className="flex flex-col gap-6">
               {savedItems.map((item) => (
                 <div
-                  key={item.id}
-                  className="bg-white border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300"
-                >
+                key={item.id}
+                className="bg-[#f3e5e5] border border-gray-300 overflow-hidden hover:shadow-md transition-shadow duration-300"
+                style={{ background: "#f3e5e5" }} 
+              >
                   <div className="flex flex-col md:flex-row">
                     {/* Image */}
                     <Link

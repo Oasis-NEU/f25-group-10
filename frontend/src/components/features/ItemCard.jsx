@@ -50,7 +50,7 @@ const ItemCard = ({ item }) => {
 
         {/* Info - Simple text below image */}
         <div className="p-4 bg-white">
-          <h3 className="text-gray-800 mb-2 line-clamp-2 text-sm font-light leading-relaxed">
+          <h3 className="text-gray-800 mb-2 line-clamp-2 text-l font-medium leading-relaxed">
             {item.title}
           </h3>
           <p
