@@ -6,7 +6,7 @@ import ItemDetail from './pages/ItemDetail';
 import Profile from './pages/Profile';
 import Search from './pages/Search';
 import Cart from './pages/Cart';
-import Explore from './pages/Explore';
+import Explore from './pages/explore';
 import PostItem from './pages/PostItem';
 
 function App() {

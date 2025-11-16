@@ -1,89 +1,88 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import PageContainer from '../components/layout/PageContainer';
-import ItemCard from '../components/features/ItemCard';
-import CategoryFilter from '../components/features/CategoryFilter';
-import { getListings, getCategories } from '../api';
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import PageContainer from "../components/layout/PageContainer";
+import ItemCard from "../components/features/ItemCard";
+import CategoryFilter from "../components/features/CategoryFilter";
+import { getListings, getCategories } from "../api";
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [query, setQuery] = useState(searchParams.get('q') || '');
+  const [query, setQuery] = useState(searchParams.get("q") || "");
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [priceRange, setPriceRange] = useState('all');
-  const [sortBy, setSortBy] = useState('recent');
-  const [allListings, setAllListings] = useState([]);
+  const [priceRange, setPriceRange] = useState("all");
+  const [sortBy, setSortBy] = useState("recent");
+
+  const [results, setResults] = useState([]);
   const [categories, setCategories] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // sync query with URL
+  // Sync query from URL
   useEffect(() => {
-    setQuery(searchParams.get('q') || '');
+    setQuery(searchParams.get("q") || "");
   }, [searchParams]);
 
-  // load listings + categories once
+  // Load categories once
   useEffect(() => {
-    const loadData = async () => {
+    const loadCats = async () => {
       try {
-        setLoading(true);
-        setError(null);
-        const [listingsData, categoriesData] = await Promise.all([
-          getListings(),
-          getCategories(),
-        ]);
-        setAllListings(listingsData || []);
-        setCategories(categoriesData || []);
+        const cats = await getCategories();
+        setCategories(cats || []);
       } catch (err) {
-        console.error('Failed to load search data', err);
-        setError('Failed to load items. Please try again.');
+        console.error(err);
+      }
+    };
+    loadCats();
+  }, []);
+
+  // Map price range to API params
+  const getPriceParams = () => {
+    if (priceRange === "under50") return { minPrice: 0, maxPrice: 50 };
+    if (priceRange === "50to100") return { minPrice: 50, maxPrice: 100 };
+    if (priceRange === "over100") return { minPrice: 100, maxPrice: null };
+    return {};
+  };
+
+  // Fetch results anytime filters change
+  useEffect(() => {
+    const fetchResults = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const priceParams = getPriceParams();
+
+        const data = await getListings({
+          q: query || null,
+          category: selectedCategory || null,
+          sortBy,
+          ...priceParams,
+        });
+
+        setResults(data || []);
+      } catch (err) {
+        console.error("Search failed", err);
+        setError("Failed to load items. Please try again.");
       } finally {
         setLoading(false);
       }
     };
-    loadData();
-  }, []);
 
-  const searchResults = allListings
-    .filter((item) => {
-      const matchesQuery =
-        !query ||
-        item.title.toLowerCase().includes(query.toLowerCase()) ||
-        item.description.toLowerCase().includes(query.toLowerCase()) ||
-        item.category.toLowerCase().includes(query.toLowerCase());
-
-      const matchesCategory =
-        !selectedCategory || item.category === selectedCategory;
-
-      let matchesPrice = true;
-      if (priceRange === 'under50') matchesPrice = item.price < 50;
-      if (priceRange === '50to100')
-        matchesPrice = item.price >= 50 && item.price <= 100;
-      if (priceRange === 'over100') matchesPrice = item.price > 100;
-
-      return matchesQuery && matchesCategory && matchesPrice;
-    })
-    .sort((a, b) => {
-      if (sortBy === 'price-low') return a.price - b.price;
-      if (sortBy === 'price-high') return b.price - a.price;
-      if (sortBy === 'recent')
-        return new Date(b.postedDate) - new Date(a.postedDate);
-      return 0;
-    });
+    fetchResults();
+  }, [query, selectedCategory, priceRange, sortBy]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (query) {
-      setSearchParams({ q: query });
-    } else {
-      setSearchParams({});
-    }
+    if (query) setSearchParams({ q: query });
+    else setSearchParams({});
   };
 
   return (
     <PageContainer>
       <div
         className="min-h-screen flex justify-center"
-        style={{ background: 'white' }}
+        style={{ background: "white" }}
       >
         <div className="max-w-6xl w-full px-6 py-12">
           {/* Search Header */}
@@ -114,10 +113,8 @@ const Search = () => {
             {/* Results Count */}
             {query && !loading && (
               <p className="text-gray-600 font-light text-sm">
-                Found{' '}
-                <span className="font-normal text-black">
-                  {searchResults.length}
-                </span>{' '}
+                Found{" "}
+                <span className="font-normal text-black">{results.length}</span>{" "}
                 results for "{query}"
               </p>
             )}
@@ -133,9 +130,7 @@ const Search = () => {
           {/* Filters & Sort */}
           <div className="flex flex-wrap gap-6 mb-12 items-center justify-center">
             <div className="flex items-center gap-3">
-              <label className="font-light text-gray-600 text-sm">
-                Price:
-              </label>
+              <label className="font-light text-gray-600 text-sm">Price:</label>
               <select
                 value={priceRange}
                 onChange={(e) => setPriceRange(e.target.value)}
@@ -163,12 +158,12 @@ const Search = () => {
               </select>
             </div>
 
-            {(selectedCategory || priceRange !== 'all' || query) && (
+            {(selectedCategory || priceRange !== "all" || query) && (
               <button
                 onClick={() => {
                   setSelectedCategory(null);
-                  setPriceRange('all');
-                  setQuery('');
+                  setPriceRange("all");
+                  setQuery("");
                   setSearchParams({});
                 }}
                 className="text-black hover:underline font-light text-sm"
@@ -187,9 +182,9 @@ const Search = () => {
             <div className="text-center py-12">
               <p className="text-red-500">{error}</p>
             </div>
-          ) : searchResults.length > 0 ? (
+          ) : results.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
-              {searchResults.map((item) => (
+              {results.map((item) => (
                 <ItemCard key={item.id} item={item} />
               ))}
             </div>
@@ -204,8 +199,8 @@ const Search = () => {
               <button
                 onClick={() => {
                   setSelectedCategory(null);
-                  setPriceRange('all');
-                  setQuery('');
+                  setPriceRange("all");
+                  setQuery("");
                   setSearchParams({});
                 }}
                 className="bg-black text-white px-6 py-3 font-light text-sm hover:bg-gray-800 transition-colors tracking-wide"
