@@ -163,7 +163,7 @@ export const currentUser = {
   id: 1,
   name: 'Angel El Moucary',
   email: 'elmoucary.a@university.edu',
-  avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+  avatar: 'angel-pfp.jpg',
   joinDate: '2024-09-01',
   rating: 4.8,
   totalSales: 12,

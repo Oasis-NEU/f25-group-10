@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ItemCard from '../components/features/ItemCard';
 import { getMe, getListings, getSavedListings } from '../api';
+import PFP from '../assets/angel-pfp.jpg';
+
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState('selling');
@@ -10,6 +12,7 @@ const Profile = () => {
   const [savedItems, setSavedItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -76,10 +79,10 @@ const Profile = () => {
           <div className="w-32 h-32 bg-gray-200 flex items-center justify-center text-gray-600 text-4xl font-light overflow-hidden">
             {user?.avatar_url ? (
               <img
-                src={user.avatar_url}
-                alt={user.name}
-                className="w-full h-full object-cover"
-              />
+              src={PFP}
+              alt={user?.name || 'Profile'}
+              className="w-full h-full object-cover"
+            />
             ) : (
               (user?.name || 'FF')
                 .split(' ')
