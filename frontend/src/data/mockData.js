@@ -1,13 +1,13 @@
 // Categories
 export const categories = [
-  { id: 1, name: 'Furniture', icon: '🛋️' },
-  { id: 2, name: 'Electronics', icon: '💻' },
-  { id: 3, name: 'Textbooks', icon: '📚' },
-  { id: 4, name: 'Clothing', icon: '👕' },
-  { id: 5, name: 'Sports', icon: '⚽' },
-  { id: 6, name: 'Kitchen', icon: '🍳' },
-  { id: 7, name: 'Decor', icon: '🖼️' },
-  { id: 8, name: 'Other', icon: '📦' },
+  { id: 1, name: 'Furniture' },
+  { id: 2, name: 'Electronics' },
+  { id: 3, name: 'Textbooks' },
+  { id: 4, name: 'Clothing'},
+  { id: 5, name: 'Sports'},
+  { id: 6, name: 'Kitchen' },
+  { id: 7, name: 'Decor' },
+  { id: 8, name: 'Other'},
 ];
 
 // Mock listings

@@ -8,6 +8,8 @@ import Search from './pages/Search';
 import Cart from './pages/Cart';
 import Explore from './pages/explore';
 import PostItem from './pages/PostItem';
+import Login from './pages/Login';
+
 
 function App() {
   return (
@@ -22,6 +24,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/item/:id" element={<ItemDetail />} />
           <Route path="/post-item" element={<PostItem />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
     </Router>
